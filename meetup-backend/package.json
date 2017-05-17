@@ -5,14 +5,20 @@
   "main": "index.js",
   "author": "Nick Coleman <nick@nickcoleman.io>",
   "license": "MIT",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon index.js"
+  },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.24.1",
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "mongoose": "4.7.7"
+    "mongoose": "4.7.7",
+    "morgan": "^1.8.1"
   },
   "devDependencies": {
-    "eslint-config-ncoleman": "^1.6.4"
+    "eslint-config-ncoleman": "^1.6.4",
+    "nodemon": "^1.11.0"
   }
 }
