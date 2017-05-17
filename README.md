@@ -2,4 +2,4 @@
 
 ## Branches
 
-* 01 Backend Server Setup: Basic project server-side NodeJS setup
+* 01 Backend Server & Mobile App Setup
