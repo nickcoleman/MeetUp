@@ -3,23 +3,34 @@
   "version": "0.0.1",
   "description": "meetup server-side",
   "main": "index.js",
-  "author": "Nick Coleman <nick@nickcoleman.io>",
+  "author": "Nick Coleman <nick@nickcoleman.io> <https://github.com/nickcoleman/MeetUp>",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon index.js"
+    "dev": "NODE_ENV=development nodemon index.js",
+    "build:watch": "babel -w --out-dir=dist ./src",
+    "clean": "rimraf dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "jsonwebtoken": "^7.4.1",
     "mongoose": "4.7.7",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1"
   },
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.4.0",
     "eslint-config-ncoleman": "^1.6.4",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1"
   }
 }
