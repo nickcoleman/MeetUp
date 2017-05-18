@@ -2,13 +2,14 @@ import express from 'express';
 
 import databaseConfig from './config/db';
 import middlewareConfig from './config/middleware';
-import { 
+import {
+  GroupRoutes,
   MeetupRoutes,
 } from './modules';
 
 const app = express();
 databaseConfig();
-middlewareConfig(app); 
+middlewareConfig(app);
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,7 +17,7 @@ app.get('/', (req, res) => {
   res.status(200).send('Meetup Backend Server running');
 });
 
-app.use('/api', [MeetupRoutes]);
+app.use('/api', [GroupRoutes, MeetupRoutes]);
 
 app.listen(PORT, err => {
   if (err) {
