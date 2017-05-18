@@ -1,6 +1,7 @@
-node_modules
-yarn.lock
+.editorconfig
 .env
 .expo/*
 .gitignore
+node_modules
 npm-debug.*
+yarn.lock
