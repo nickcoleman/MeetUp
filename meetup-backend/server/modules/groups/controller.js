@@ -69,13 +69,15 @@ export const getAllGroups = async (req, res) => {
 };
 
 export const getGroupMeetups = async (req, res) => {
+  // console.log('getGroupMeetups api called');
   const { groupId } = req.params;
 
   if (!groupId) {
     return res.status(400).json({ error: true, message: 'GroupId is required' });
   }
 
-  const group = await Group.findById(groupId);
+  const group = await Group.findById(groupId)
+    .catch(e => res.status(400).json({ error: true, message: `Error getting GroupById: ${e.message}` }));
 
   if (!group) {
     return res.status(400).json({ error: true, message: `GroupId ${groupId} does not exist` });
@@ -84,7 +86,7 @@ export const getGroupMeetups = async (req, res) => {
   try {
     return res.status(200).json({
       error: false,
-      meetups: await Meetup.find({ group: groupId }),
+      meetups: await Meetup.find({ group: groupId }).populate('group', 'name'),
     });
   } catch (e) {
     return res.status(e.status).json({ error: true, message: `getGroupMeetups error: ${e.message}` });
