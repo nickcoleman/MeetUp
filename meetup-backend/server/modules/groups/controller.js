@@ -1,4 +1,5 @@
 import Group from './model';
+import { Meetup } from '../meetups';
 
 export const createGroup = async (req, res) => {
   const { name, description, category } = req.body;
@@ -52,18 +53,42 @@ export const createGroupMeetup = async (req, res) => {
   }
 
   try {
-    const { meetup } = await Group.addMeetup(groupId, { title, description });
-    return res.status(201).json({ error: false, meetup });
+    const { meetup, group } = await Group.addMeetup(groupId, { title, description });
+    return res.status(201).json({ error: false, meetup, group });
   } catch (e) {
     return res.status(e.status).json({ error: true, message: `createGroupMeetup error: ${e.message}` });
   }
 };
 
 export const getAllGroups = async (req, res) => {
-  console.log('getAllGroups');
   try {
     return res.status(200).json({ error: false, meetups: await Group.find({}) });
   } catch (e) {
     return res.status(e.status).json({ error: true, message: `getAllGroups error: ${e.message}` });
+  }
+};
+
+export const getGroupMeetups = async (req, res) => {
+  // console.log('getGroupMeetups api called');
+  const { groupId } = req.params;
+
+  if (!groupId) {
+    return res.status(400).json({ error: true, message: 'GroupId is required' });
+  }
+
+  const group = await Group.findById(groupId)
+    .catch(e => res.status(400).json({ error: true, message: `Error getting GroupById: ${e.message}` }));
+
+  if (!group) {
+    return res.status(400).json({ error: true, message: `GroupId ${groupId} does not exist` });
+  }
+
+  try {
+    return res.status(200).json({
+      error: false,
+      meetups: await Meetup.find({ group: groupId }).populate('group', 'name'),
+    });
+  } catch (e) {
+    return res.status(e.status).json({ error: true, message: `getGroupMeetups error: ${e.message}` });
   }
 };

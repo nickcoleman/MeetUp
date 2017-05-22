@@ -1,66 +1,39 @@
-import Expo from 'expo';
+import Expo, { AppLoading } from 'expo';
 import React from 'react';
-import { 
-  ActivityIndicator,
-  StyleSheet, 
-  Text, 
-  View,
-} from 'react-native';
-import { fetchMeetups } from './constants/api';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import Colors from './constants/Colors';
+import { cachedFonts } from './helper';
+import Root from './src/Root';
+
+EStyleSheet.build(Colors);
 
 class App extends React.Component {
-  static defaultProps = {
-    fetchMeetups,
-  }
-
   state = {
-    loading: false,
-    meetups: [],
+    fontLoaded: false,
   }
 
-  async componentDidMount() {
-    this.setState({ loading: true })
-    const data = await this.props.fetchMeetups();
-    console.log('Meetup Data', data)
-    this.setState({ loading: false, meetups: data.meetups })
+  componentDidMount() {
+    this.loadAssestsAsync();
   }
 
-  renderMeetups() {
-    this.state.meetups.map((meetup, i) => {
-      return (
-        <div key={i}>
-          {meetup.title}
-        </div>
-      )
-    })
+  async loadAssestsAsync() {
+    const fontAssests = cachedFonts([
+      { montserrat: require('./assets/fonts/Montserrat-Regular.ttf') },
+      { montserratBold: require('./assets/fonts/Montserrat-Bold.ttf') },
+      { montserratLight: require('./assets/fonts/Montserrat-Light.ttf') },
+      { montserratMed: require('./assets/fonts/Montserrat-Medium.ttf') },
+    ]);
+
+    await Promise.all(fontAssests);
+    this.setState({ fontLoaded: true });
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" />
-        </View>
-      )
+    if (!this.state.fontLoaded) {
+      return <AppLoading />;
     }
-    return (
-      <View style={styles.container}>
-        <Text>Meetup Mobile App</Text>
-        {this.state.meetups.map((meetup, i) => (
-          <Text key={i}>{meetup.title}</Text>
-        ))}
-      </View>
-    );
+    return <Root />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Expo.registerRootComponent(App);

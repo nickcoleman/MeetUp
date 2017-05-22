@@ -32,9 +32,10 @@ GroupSchema.statics.addMeetup = async function (id, args) {
   const meetup = await new Meetup({ ...args, group: id });
 
   // add the meetup Id to the parent Group
-  await this.findByIdAndUpdate(id, { $push: { meetups: meetup.id } });
+  const group = await this.findByIdAndUpdate(id, { $push: { meetups: meetup.id } });
   return {
     meetup: await meetup.save(),
+    group,
   };
 };
 
